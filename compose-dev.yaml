@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: flask_service
+      target: builder
+    stop_signal: SIGINT
+    ports:
+      - '5001:5000'
+    init: true
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock

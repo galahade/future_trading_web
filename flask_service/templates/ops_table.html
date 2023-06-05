@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="bottom" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>合约</th>
+        <th>方向</th>
+        <th>手数</th>
+        <th>成交价</th>
+        <th>交易时间</th>
+        <th>止损价</th>
+        <th>手续费</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <table id="main" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>合约</th>
+        <th>方向</th>
+        <th>手数</th>
+        <th>成交价</th>
+        <th>交易时间</th>
+        <th>止损价</th>
+        <th>手续费</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#bottom').DataTable({
+        ajax: '{{ bottom_api_url }}',
+        paging: false,
+        columns: [
+          {data: 'symbol'},
+          {data: 'custom_symbol',
+           render: function (data, type) {
+               var direction = '买';
+               if (data == 'S')
+                 direction = '卖'
+               if (type === 'display') {
+                   let color = 'green';
+                   if (data == 'S') {
+                       color = 'red';
+                   }
+                   return '<span style="color:' + color + '">' + direction + '</span>';
+               }
+               return direction;
+           },
+          },
+          {data: 'trade_data.pos', searchable: false},
+          {data: 'trade_data.price', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+          {data: 'trade_data.datetime'},
+          {data: 'trade_data.slp', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+          {data: 'trade_data.commission', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+        ],
+      });
+      $('#main').DataTable({
+        ajax: '{{ main_api_url }}',
+        paging: false,
+        order: [4, 'desc'],
+        columns: [
+          {data: 'symbol'},
+          {data: 'custom_symbol',
+           render: function (data, type) {
+               var direction = '买';
+               if (data == 'S')
+                 direction = '卖'
+               if (type === 'display') {
+                   let color = 'green';
+                   if (data == 'S') {
+                       color = 'red';
+                   }
+                   return '<span style="color:' + color + '">' + direction + '</span>';
+               }
+               return direction;
+           },
+          },
+          {data: 'trade_data.pos', searchable: false},
+          {data: 'trade_data.price', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+          {data: 'trade_data.datetime'},
+          {data: 'trade_data.slp', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+          {data: 'trade_data.commission', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+        ],
+      });
+    });
+  </script>
+{% endblock %}

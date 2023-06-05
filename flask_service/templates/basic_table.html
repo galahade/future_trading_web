@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>合约名称</th>
+        <th>多空</th>
+        <th>日K线时间</th>
+        <th>开仓手数</th>
+        <th>上一日收盘价</th>
+        <th>合约乘数</th>
+        <th>开仓比例</th>
+        <th>资金总额</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in tams %}
+        <tr>
+          <td>{{ message.symbol }}</td>
+          <td>{{ message.custom_symbol }}</td>
+          <td>{{ message.datetime }}</td>
+          <td>{{ message.pos}}</td>
+          <td>{{ message.last_price}}</td>
+          <td>{{ message.contract_m}}</td>
+          <td>{{ message.open_pos_scale }}</td>
+          <td>{{ message.balance }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        columns: [
+          null,null,null,
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          ],
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  backend:
+    # build: .
+    image: galahade/future-backend-dev:latest
+    stop_signal: SIGINT
+    networks:
+      - backend
+      - mongo_main
+      - mongo_bottom
+    ports:
+      - '5005:5005'
+    environment:
+      BOTTOM_DB: mongo_bottom
+      MAIN_DB: mongo_main
+      HOST_NAME: host.docker.internal
+networks:
+  backend:
+  mongo_bottom:
+    name: bottom-trade-young_database
+    external: true
+  mongo_main:
+    name: main-trade-young_database
+    external: true

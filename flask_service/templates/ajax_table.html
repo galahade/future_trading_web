@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>时间</th>
+        <th>合约</th>
+        <th>方向</th>
+        <th>手数</th>
+        <th>七日次数</th>
+        <th>上一收盘价</th>
+        <th>合约乘数</th>
+        <th>开仓比例</th>
+        <th>资金总额</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '{{ api_url }}',
+        paging: false,
+        columns: [
+          {data: 'datetime'},
+          {data: 'symbol',
+           render: function (data, type, row, meta) {
+               let count = row.count
+               if (type === 'display') {
+                   let color = 'green';
+                   if (count == 1)
+                       color = 'red';
+                   return '<span style="color:' + color + '">' + data + '</span>';
+               }
+               return data;
+           },
+          },
+          {data: 'custom_symbol',
+           render: function (data, type) {
+               var direction = '买';
+               if (data == 'S')
+                 direction = '卖'
+               if (type === 'display') {
+                   let color = 'green';
+                   if (data == 'S') {
+                       color = 'red';
+                   }
+                   return '<span style="color:' + color + '">' + direction + '</span>';
+               }
+               return direction;
+           },
+          },
+          {data: 'pos', searchable: false},
+          {data: 'count', searchable: false},
+          {data: 'last_price', searchable: false,
+           render: function (data, type) {
+               var number = $.fn.dataTable.render.number(',', '.', 2, '¥')
+                   .display(data);
+               return number;
+           },
+          },
+          {data: 'contract_m', searchable: false},
+          {data: 'open_pos_scale', orderable: false, searchable: false},
+          {data: 'balance', orderable: false, searchable: false},
+        ],
+      });
+    });
+  </script>
+{% endblock %}

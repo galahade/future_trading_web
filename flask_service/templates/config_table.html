@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="bottom" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>主联合约</th>
+        <th>名称</th>
+        <th>是否交易</th>
+        <th>合约乘数</th>
+        <th>开仓比例</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <table id="main" class="table table-striped" style="width:100%">
+    <thead>
+      <tr>
+        <th>合约</th>
+        <th>方向</th>
+        <th>手数</th>
+        <th>成交价</th>
+        <th>交易时间</th>
+        <th>止损价</th>
+        <th>手续费</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#bottom').DataTable({
+        ajax: '{{ bottom_api_url }}',
+        paging: false,
+        order: [],
+        columns: [
+          {data: 'symbol',
+           render: function (data, type, row, meta) {
+               let active = row.is_active
+                let color = 'black';
+               if (active) {
+                   color = 'red'
+               }
+               return '<span style="color:' + color + '">' + data + '</span>';
+           },
+          },
+          {data: 'name', orderable: false},
+          {data: 'is_active', searchable: false},
+          {data: 'contract_m', searchable: false},
+          {data: 'open_pos_scale', searchable: false},
+        ],
+      });
+    });
+  </script>
+{% endblock %}
